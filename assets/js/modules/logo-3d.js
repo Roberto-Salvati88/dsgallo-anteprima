@@ -99,9 +99,9 @@ export default function logo3d(scene, { gsap }) {
   render();
 
   return {
-    // p da 0 a 1 mentre il logo compare: un giro e mezzo che rallenta fino al fronte
+    // p da 0 a 1 mentre il logo compare (già con easing): un giro intero che si ferma di fronte
     setScroll(p) {
-      state.scroll = -540 * Math.pow(1 - p, 2);
+      state.scroll = -360 * (1 - p);
       render();
     },
   };

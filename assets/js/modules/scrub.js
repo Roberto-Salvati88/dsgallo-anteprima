@@ -11,11 +11,15 @@ export function scrubber(section, canvas, video) {
 
 export function videoScrub(video) {
   let duration = 0;
+  let lastP = 0;
   video.preload = "auto";
   video.load();
   video.pause();
-  const ready = () => (duration = video.duration || 0);
-  if (video.readyState >= 1) ready();
+  // se il video finisce di caricarsi dopo che si è già scorso, salta subito al punto giusto
+  const ready = () => {
+    duration = video.duration || 0;
+    if (duration && lastP) seek(Math.min(lastP * duration, duration - 0.05));
+  };
   video.addEventListener("loadedmetadata", ready);
 
   let pending = null;
@@ -38,7 +42,10 @@ export function videoScrub(video) {
     video.currentTime = t;
   }
 
+  if (video.readyState >= 1) ready();
+
   return (p) => {
+    lastP = p;
     if (duration) seek(Math.min(p * duration, duration - 0.05));
   };
 }

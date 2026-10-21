@@ -1,5 +1,6 @@
-/* la foto del centro commerciale ha l'insegna dietro al titolo: velo più scuro */
-.page-hero--dove .page-hero__scrim { background: linear-gradient(0deg, rgba(24, 28, 36, 0.92) 0%, rgba(24, 28, 36, 0.7) 55%, rgba(24, 28, 36, 0.45) 100%); }
+/* hero: il percorso dall'ingresso del centro commerciale fino allo showroom */
+.hero--dove { height: 360vh; }
+@media (max-width: 640px) { .hero--dove { height: 300vh; } }
 .dove { display: grid; gap: var(--sp-5); align-items: start; }
 .dove__address { margin-bottom: var(--sp-4); font-style: normal; font-size: var(--fs-l); line-height: 1.5; }
 .dove__subtitle { margin-bottom: var(--sp-2); font-size: var(--fs-h3); }

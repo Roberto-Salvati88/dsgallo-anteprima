@@ -103,9 +103,7 @@
   height: auto;
   margin-top: calc(var(--sp-2) * -1);
   pointer-events: none;
-  filter:
-    drop-shadow(0 1px 0 rgba(58, 61, 68, 0.55)) drop-shadow(0 1px 0 rgba(58, 61, 68, 0.35))
-    drop-shadow(0 5px 6px rgba(24, 28, 36, 0.18));
+  filter: drop-shadow(0 2px 0 rgba(58, 61, 68, 0.35)) drop-shadow(0 6px 8px rgba(24, 28, 36, 0.15));
 }
 
 .hero__hint {
@@ -125,6 +123,10 @@
 @keyframes hint { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
 @media (min-width: 900px) { .hero__hint { display: flex; } }
 @media (max-width: 640px) { .hero { height: 240vh; } .hero__actions .btn { width: 100%; } }
+
+/* Home: più scroll per il video e per l'ingresso lento del logo */
+.hero--home { height: 520vh; }
+@media (max-width: 640px) { .hero--home { height: 440vh; } }
 
 /* Variante per le pagine servizio: titolo più contenuto */
 .hero--servizio { height: 260vh; }

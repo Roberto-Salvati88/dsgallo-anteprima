@@ -20,24 +20,30 @@ export default function heroFinestra(section, { gsap, ScrollTrigger, reduce }) {
 
   const tl = gsap.timeline({
     defaults: { ease: "none" },
-    scrollTrigger: { trigger: section, start: "top top", end: "bottom bottom", scrub: 0.6 },
+    scrollTrigger: { trigger: section, start: "top top", end: "bottom bottom", scrub: 1 },
   });
 
-  tl.to({}, { duration: 1, onUpdate() { drawScene(this.progress()); } }, 0)
+  // con il finale del logo (home) il video occupa la prima parte dello scroll, poi la scena si ferma
+  const sceneEnd = outro ? 0.6 : 1;
+  tl.to({}, { duration: sceneEnd, onUpdate() { drawScene(this.progress()); } }, 0)
     .to(hint, { opacity: 0, duration: 0.06 }, 0)
     .to(copy, { opacity: 0, y: -60, duration: 0.22 }, 0.06)
     .to(scrim, { opacity: 0, duration: 0.25 }, 0.06);
 
-  // finale della home: il logo 3D copre il logo piatto del video e gira entrando
+  // finale della home: lo sfondo chiaro copre il video, poi il logo 3D entra girando
+  // lentamente e si ferma di fronte, infine compare la scritta; un tratto di scroll fermo prima di uscire
   if (outro) {
-    tl.fromTo(outro, { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.8);
     const logo = section.querySelector("[data-logo3d]");
+    const scritta = section.querySelector("[data-logo3d-scritta]");
     const model = logo && logo3d(logo, { gsap });
-    tl.eventCallback("onUpdate", () => {
-      const p = tl.progress();
-      outro.classList.toggle("is-live", p > 0.86);
-      model?.setScroll(Math.min(Math.max((p - 0.82) / 0.18, 0), 1));
-    });
+    const spin = { p: 0 };
+    tl.fromTo(outro, { opacity: 0 }, { opacity: 1, duration: 0.06 }, sceneEnd - 0.02)
+      .fromTo(logo, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.1, ease: "power2.out" }, sceneEnd + 0.03)
+      .to(spin, { p: 1, duration: 0.24, ease: "power2.out", onUpdate: () => model?.setScroll(spin.p) }, sceneEnd + 0.03)
+      .fromTo(scritta, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out" }, sceneEnd + 0.2)
+      .to({}, { duration: 0.08 }, sceneEnd + 0.28);
+    tl.eventCallback("onUpdate", () => outro.classList.toggle("is-live", tl.progress() > 0.82));
+    model?.setScroll(0);
   }
 
   // ingresso del titolo al caricamento
