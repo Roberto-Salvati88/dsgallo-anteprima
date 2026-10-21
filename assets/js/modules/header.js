@@ -7,6 +7,7 @@ export function initHeader() {
   const update = () => {
     const y = window.scrollY;
     header.classList.toggle("is-scrolled", y > 40);
+    document.documentElement.classList.toggle("is-top", y < window.innerHeight * 0.5);
     // si nasconde scendendo, ricompare appena si risale
     const goingDown = y > lastY && y > 400;
     header.classList.toggle("is-hidden", goingDown && !header.classList.contains("is-open"));

@@ -5,6 +5,9 @@ export default function scrollScene(section, { gsap, reduce }) {
   const layerB = section.querySelector(".scene__layer--b");
   const marks = [...section.querySelectorAll(".scene__progress span")];
 
+  // dentro il contenitore bloccato il caricamento "lazy" può non partire mai
+  section.querySelectorAll("img[loading=lazy]").forEach((img) => (img.loading = "eager"));
+
   if (reduce || !gsap) {
     if (layerB) layerB.style.opacity = 1;
     return;

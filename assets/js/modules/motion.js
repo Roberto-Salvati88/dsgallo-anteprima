@@ -10,6 +10,8 @@ export function initMotion() {
   }
 
   gsap.registerPlugin(ScrollTrigger);
+  // su mobile la barra degli indirizzi cambia l'altezza a ogni scroll: niente ricalcoli a scatti
+  ScrollTrigger.config({ ignoreMobileResize: true });
 
   if (Lenis) {
     const lenis = new Lenis({ lerp: 0.11 });

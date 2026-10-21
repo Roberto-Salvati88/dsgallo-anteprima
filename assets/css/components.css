@@ -15,6 +15,9 @@
   background: var(--orange);
   border: 1.5px solid var(--orange);
   border-radius: 999px;
+  line-height: 1.15;
+  text-align: center;
+  text-wrap: balance;
   transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.25s var(--ease-out);
 }
 .btn:hover { background: var(--orange-dark); border-color: var(--orange-dark); }

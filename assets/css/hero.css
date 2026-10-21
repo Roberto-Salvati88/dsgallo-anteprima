@@ -53,12 +53,60 @@
   display: grid;
   place-content: center;
   justify-items: center;
-  gap: var(--sp-2);
+  gap: var(--sp-4);
+  background: radial-gradient(circle at 50% 45%, var(--white) 0%, var(--paper) 70%, var(--fog) 100%);
   opacity: 0;
   pointer-events: none;
 }
-.hero__outro img { width: clamp(110px, 14vw, 180px); height: auto; filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.45)); }
-.hero__outro p { font-family: var(--font-display); font-size: var(--fs-l); letter-spacing: 0.3em; text-transform: uppercase; }
+.hero__outro.is-live { pointer-events: auto; }
+
+/* Logo 3D: il logo con il suo spessore, nessuna base */
+.logo3d {
+  --d: clamp(220px, 64vw, 380px);
+  --t: calc(var(--d) * 0.045);
+  position: relative;
+  width: var(--d);
+  aspect-ratio: 1;
+  perspective: 1400px;
+  touch-action: pan-y;
+  cursor: grab;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.logo3d.is-dragging { cursor: grabbing; }
+.logo3d:focus-visible { outline: 2px solid var(--orange); outline-offset: 12px; border-radius: 12px; }
+.logo3d__oggetto {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  will-change: transform;
+}
+.logo3d img { pointer-events: none; -webkit-user-drag: none; }
+.logo3d__faccia,
+.logo3d__strato,
+.logo3d__retro {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.logo3d__faccia { backface-visibility: hidden; transform: translateZ(calc(var(--t) / 2)); }
+.logo3d__strato { transform: translateZ(calc(var(--t) / 2 - var(--i) * var(--t) / 17)); }
+/* il retro è lo stesso logo visto da dietro, allineato al suo spessore */
+.logo3d__retro { backface-visibility: hidden; transform: rotateY(180deg) translateZ(calc(var(--t) / 2)); }
+.logo3d__retro img { width: 100%; height: 100%; transform: scaleX(-1); }
+/* scritta del marchio sotto il logo: in rilievo, ferma */
+.logo3d__scritta {
+  width: calc(var(--d, clamp(220px, 64vw, 380px)) * 0.95);
+  height: auto;
+  margin-top: calc(var(--sp-2) * -1);
+  pointer-events: none;
+  filter:
+    drop-shadow(0 1px 0 rgba(58, 61, 68, 0.55)) drop-shadow(0 1px 0 rgba(58, 61, 68, 0.35))
+    drop-shadow(0 5px 6px rgba(24, 28, 36, 0.18));
+}
 
 .hero__hint {
   position: absolute;

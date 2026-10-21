@@ -1,6 +1,12 @@
-// Hero della home: lo scroll fa avanzare la scena (finestra che si apre su Torino).
-// Se la sezione ha data-frames="/percorso/frame-###.webp" e data-frame-count usa una
-// sequenza di immagini su canvas (più fluida); altrimenti pilota il video.
+// Hero a scorrimento (home e pagine servizio): lo scroll fa avanzare la scena.
+// Su telefoni e tablet in verticale, se la sezione ha data-frames e data-frame-count,
+// disegna su canvas una sequenza di immagini: iPhone e molti Android non caricano
+// il video finché non parte la riproduzione, quindi lo scroll non lo farebbe avanzare.
+// Sugli schermi grandi pilota il video.
+import logo3d from "./logo-3d.js";
+
+const MOBILE = "(max-width: 950px), (max-aspect-ratio: 1/1)";
+
 export default function heroFinestra(section, { gsap, ScrollTrigger, reduce }) {
   const canvas = section.querySelector("[data-hero-canvas]");
   const video = section.querySelector("[data-hero-video]");
@@ -14,7 +20,8 @@ export default function heroFinestra(section, { gsap, ScrollTrigger, reduce }) {
     return;
   }
 
-  const drawScene = section.dataset.frames ? frameSequence(section, canvas) : videoScrub(video);
+  const useFrames = section.dataset.frames && canvas && window.matchMedia(MOBILE).matches;
+  const drawScene = useFrames ? frameSequence(section, canvas) : videoScrub(video);
 
   const tl = gsap.timeline({
     defaults: { ease: "none" },
@@ -26,9 +33,17 @@ export default function heroFinestra(section, { gsap, ScrollTrigger, reduce }) {
     .to(copy, { opacity: 0, y: -60, duration: 0.22 }, 0.06)
     .to(scrim, { opacity: 0, duration: 0.25 }, 0.06);
 
-  // il logo finale: è già nell'ultimo frame del video; se si usa la sequenza di
-  // immagini senza logo, si può aggiungere un elemento [data-hero-outro]
-  if (outro) tl.fromTo(outro, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.15 }, 0.82);
+  // finale della home: il logo 3D copre il logo piatto del video e gira entrando
+  if (outro) {
+    tl.fromTo(outro, { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.8);
+    const logo = section.querySelector("[data-logo3d]");
+    const model = logo && logo3d(logo, { gsap });
+    tl.eventCallback("onUpdate", () => {
+      const p = tl.progress();
+      outro.classList.toggle("is-live", p > 0.86);
+      model?.setScroll(Math.min(Math.max((p - 0.82) / 0.18, 0), 1));
+    });
+  }
 
   // ingresso del titolo al caricamento
   gsap.from(section.querySelectorAll(".hero__line, .hero__lead, .hero__actions, .hero__rating, .eyebrow"), {
@@ -44,6 +59,8 @@ export default function heroFinestra(section, { gsap, ScrollTrigger, reduce }) {
 
 function videoScrub(video) {
   let duration = 0;
+  video.preload = "auto";
+  video.load();
   video.pause();
   const ready = () => (duration = video.duration || 0);
   if (video.readyState >= 1) ready();
@@ -75,7 +92,6 @@ function videoScrub(video) {
 }
 
 function frameSequence(section, canvas) {
-  section.classList.add("has-frames");
   const ctx = canvas.getContext("2d");
   const count = Number(section.dataset.frameCount);
   const pattern = section.dataset.frames;
@@ -88,7 +104,13 @@ function frameSequence(section, canvas) {
     const img = new Image();
     img.decoding = "async";
     img.src = src(i);
-    if (i === 0) img.onload = () => render(0);
+    // il poster resta visibile finché non arriva il primo fotogramma
+    if (i === 0) {
+      img.onload = () => {
+        section.classList.add("has-frames");
+        resize();
+      };
+    }
     frames.push(img);
   }
 
@@ -99,9 +121,14 @@ function frameSequence(section, canvas) {
     render(current);
   }
 
+  const loaded = (img) => img && img.complete && img.naturalWidth;
+
   function render(i) {
-    const img = frames[i];
-    if (!img || !img.complete || !img.naturalWidth) return;
+    // se lo scroll è più veloce del download, usa il fotogramma pronto più vicino
+    let k = i;
+    while (k > 0 && !loaded(frames[k])) k--;
+    const img = frames[k];
+    if (!loaded(img)) return;
     const cw = canvas.width;
     const ch = canvas.height;
     const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
@@ -111,7 +138,6 @@ function frameSequence(section, canvas) {
   }
 
   window.addEventListener("resize", resize);
-  resize();
 
   return (p) => {
     const i = Math.min(count - 1, Math.round(p * (count - 1)));
