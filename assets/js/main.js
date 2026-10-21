@@ -3,6 +3,7 @@ import { initNav } from "./modules/nav.js";
 import { initMotion } from "./modules/motion.js";
 import { initTabs } from "./modules/tabs.js";
 import { initCompare } from "./modules/compare.js";
+import { initMappe } from "./modules/mappa.js";
 
 const pageModules = {
   "hero-finestra": () => import("./modules/hero-finestra.js"),
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
   initTabs();
   initCompare();
+  initMappe();
   const motion = initMotion();
 
   for (const [name, load] of Object.entries(pageModules)) {

@@ -29,6 +29,13 @@
   text-transform: uppercase;
   color: var(--orange);
 }
+/* sulle foto scure l'arancione pieno si legge poco: tono più chiaro, più peso e un'ombra */
+.page-hero .eyebrow,
+.hero .eyebrow {
+  font-weight: 700;
+  color: #ffa25a;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.65);
+}
 .eyebrow::before {
   content: "";
   width: 28px;
@@ -199,13 +206,6 @@
 }
 .site-footer__list { display: grid; gap: 0.55rem; }
 .site-footer__address { margin-bottom: var(--sp-2); }
-
-.site-footer__zone {
-  margin-top: var(--sp-6);
-  padding-top: var(--sp-4);
-  border-top: 1px solid var(--line-dark);
-}
-.site-footer__zone ul { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; }
 
 .site-footer__legal {
   margin-top: var(--sp-5);

@@ -109,22 +109,4 @@
 .cys-teaser .grid-2 > :first-child { display: grid; place-items: center; }
 .cys-teaser__logo { width: min(380px, 80%); height: auto; }
 
-/* Zone */
-.zone-teaser__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 0;
-  margin-bottom: var(--sp-5);
-  border-top: 1px solid var(--line-dark);
-}
-.zone-teaser__list a {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 0.85rem 0.25rem;
-  border-bottom: 1px solid var(--line-dark);
-  transition: color 0.2s;
-}
-.zone-teaser__list a:hover { color: var(--orange); }
-.zone-teaser__list small { font-size: var(--fs-xs); color: rgba(255, 255, 255, 0.45); }
 .hero__rating:hover { color: var(--white); }

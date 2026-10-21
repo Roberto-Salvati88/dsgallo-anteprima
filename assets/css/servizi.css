@@ -77,6 +77,11 @@
 .scene__pin { position: relative; height: 100svh; overflow: hidden; }
 .scene__layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .scene__layer--b { opacity: 0; }
+.scene__video,
+.scene__canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.scene__canvas { display: none; }
+.scene.has-frames .scene__canvas { display: block; }
+.scene.has-frames .scene__video { display: none; }
 .scene__caption {
   position: absolute;
   left: 0;

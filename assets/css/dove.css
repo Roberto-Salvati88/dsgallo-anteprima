@@ -1,0 +1,20 @@
+/* la foto del centro commerciale ha l'insegna dietro al titolo: velo più scuro */
+.page-hero--dove .page-hero__scrim { background: linear-gradient(0deg, rgba(24, 28, 36, 0.92) 0%, rgba(24, 28, 36, 0.7) 55%, rgba(24, 28, 36, 0.45) 100%); }
+.dove { display: grid; gap: var(--sp-5); align-items: start; }
+.dove__address { margin-bottom: var(--sp-4); font-style: normal; font-size: var(--fs-l); line-height: 1.5; }
+.dove__subtitle { margin-bottom: var(--sp-2); font-size: var(--fs-h3); }
+.dove__hours { display: grid; gap: 0.5rem; margin-bottom: var(--sp-4); }
+.dove__hours div { display: flex; justify-content: space-between; gap: var(--sp-2); padding-bottom: 0.5rem; border-bottom: 1px solid var(--line); }
+.dove__hours dt { color: var(--text-muted); }
+.dove__hours dd { display: grid; margin: 0; font-weight: 600; text-align: right; white-space: nowrap; }
+.dove__contacts { display: grid; gap: 0.4rem; font-weight: 600; }
+.dove__contacts a:hover { color: var(--orange); }
+.dove__gallery { display: grid; gap: var(--sp-3); }
+.dove__gallery figure { margin: 0; overflow: hidden; background: var(--white); border-radius: var(--radius-m); box-shadow: var(--shadow-m); }
+.dove__gallery img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+.dove__gallery figcaption { display: grid; gap: 0.2rem; padding: var(--sp-3); color: var(--text-muted); font-size: var(--fs-s); }
+.dove__gallery strong { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+@media (min-width: 900px) {
+  .dove { grid-template-columns: 0.9fr 1.1fr; gap: var(--sp-6); }
+  .dove__gallery { grid-template-columns: repeat(3, 1fr); }
+}
