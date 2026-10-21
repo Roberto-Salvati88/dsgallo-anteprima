@@ -1,0 +1,123 @@
+/* Galleria lavori */
+.gallery { display: grid; gap: var(--sp-2); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.gallery__item { margin: 0; overflow: hidden; border-radius: var(--radius-m); background: var(--white); }
+.gallery__item img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; transition: transform 1s var(--ease-out); }
+.gallery__item:hover img { transform: scale(1.04); }
+.gallery__item figcaption { padding: 0.8rem 1rem; font-size: var(--fs-xs); color: var(--text-muted); }
+
+/* Esploso del serramento */
+.esploso { padding-block: 0; background: var(--ink); color: var(--white); }
+.esploso__pin { min-height: 100svh; display: flex; align-items: center; padding-block: calc(var(--header-h) + var(--sp-4)) var(--sp-5); }
+.esploso__grid { display: grid; gap: var(--sp-5); align-items: center; }
+.esploso__steps { display: grid; gap: var(--sp-2); margin-top: var(--sp-4); counter-reset: s; }
+.esploso__steps li {
+  display: grid;
+  gap: 0.25rem;
+  padding-left: var(--sp-3);
+  border-left: 2px solid var(--line-dark);
+  color: rgba(255, 255, 255, 0.45);
+  transition: color 0.4s, border-color 0.4s;
+}
+.esploso__steps strong { font-family: var(--font-display); font-size: 1.3rem; text-transform: uppercase; color: rgba(255, 255, 255, 0.6); transition: color 0.4s; }
+.esploso__steps li.is-active { color: rgba(255, 255, 255, 0.85); border-color: var(--orange); }
+.esploso__steps li.is-active strong { color: var(--white); }
+.esploso__visual { position: relative; aspect-ratio: 4 / 5; max-height: 78svh; margin-inline: auto; width: 100%; }
+.esploso__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.esploso__img--esploso { opacity: 0; }
+.esploso--static .esploso__img--esploso { opacity: 1; }
+.esploso--static .esploso__pin { min-height: auto; padding-block: var(--sp-7); }
+@media (min-width: 900px) { .esploso__grid { grid-template-columns: 1fr 1.1fr; } }
+
+/* Materiali */
+.material { display: grid; gap: var(--sp-4); align-items: center; }
+.material__media { overflow: hidden; border-radius: var(--radius-l); }
+.material__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.material__title { font-size: var(--fs-h2); margin-bottom: var(--sp-2); }
+.material__lead { font-size: var(--fs-l); color: var(--text-muted); }
+.material__tag { display: inline-block; padding: 0.6rem 1rem; font-size: var(--fs-s); background: var(--orange-soft); border-radius: var(--radius-s); }
+.tabs__panel:not([hidden]) .material__media img { animation: fadeUp 0.7s var(--ease-out); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px) scale(1.02); } }
+@media (min-width: 900px) { .material { grid-template-columns: 1.1fr 1fr; gap: var(--sp-6); } }
+
+/* Doppio / triplo vetro */
+.vetro__switch { display: inline-flex; margin-block: var(--sp-3); padding: 0.3rem; background: var(--ink-3); border-radius: 999px; }
+.vetro__switch button { padding: 0.65rem 1.3rem; font-family: var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; border-radius: 999px; transition: background 0.3s, color 0.3s; }
+.vetro__switch button[aria-checked="true"] { background: var(--orange); }
+.vetro__visual {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 380px;
+  padding: var(--sp-4);
+  overflow: hidden;
+  border-radius: var(--radius-l);
+  background: linear-gradient(90deg, #2b4a6b 0%, var(--ink-2) 50%, #5a3a22 100%);
+}
+.vetro__outside, .vetro__inside { position: relative; z-index: 1; display: grid; font-size: var(--fs-xs); letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255, 255, 255, 0.7); }
+.vetro__inside { text-align: right; }
+.vetro__outside strong, .vetro__inside strong { font-family: var(--font-display); font-size: 2.6rem; letter-spacing: 0; color: var(--white); }
+.vetro__panes { position: relative; z-index: 1; display: flex; align-items: stretch; height: 260px; }
+.vetro__pane { width: 10px; border-radius: 2px; background: linear-gradient(180deg, rgba(200, 230, 255, 0.85), rgba(160, 200, 230, 0.6)); box-shadow: 0 0 18px rgba(170, 210, 255, 0.35); }
+.vetro__gap { width: 26px; background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0 6px, transparent 6px 12px); }
+.vetro__pane--extra, .vetro__gap--extra { width: 0; opacity: 0; transition: width 0.6s var(--ease-out), opacity 0.4s; }
+.vetro__visual[data-mode="triplo"] .vetro__pane--extra { width: 10px; opacity: 1; }
+.vetro__visual[data-mode="triplo"] .vetro__gap--extra { width: 26px; opacity: 1; }
+.vetro__heat {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 15% 50%, rgba(80, 150, 230, 0.45), transparent 45%);
+  transition: opacity 0.6s;
+}
+.vetro__visual[data-mode="triplo"] .vetro__heat { opacity: 0.45; }
+
+/* Scena pilotata dallo scroll (tapparelle, tende, porte) */
+.scene { padding-block: 0; background: var(--ink); color: var(--white); }
+.scene__pin { position: relative; height: 100svh; overflow: hidden; }
+.scene__layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.scene__layer--b { opacity: 0; }
+.scene__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding-block: var(--sp-6) var(--sp-5);
+  background: linear-gradient(0deg, rgba(24, 28, 36, 0.9), transparent);
+}
+.scene__caption h2 { font-size: var(--fs-h2); max-width: 18ch; }
+.scene__progress { display: flex; gap: 6px; margin-top: var(--sp-3); }
+.scene__progress span { width: 40px; height: 3px; background: rgba(255, 255, 255, 0.25); }
+.scene__progress span.is-on { background: var(--orange); }
+
+
+/* Estate / inverno */
+.stagioni { position: relative; overflow: hidden; border-radius: var(--radius-l); aspect-ratio: 16 / 10; }
+.stagioni img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.9s var(--ease-out), transform 1.2s var(--ease-out); }
+.stagioni img[data-season="inverno"] { opacity: 0; transform: scale(1.04); }
+.stagioni[data-mode="inverno"] img[data-season="inverno"] { opacity: 1; transform: none; }
+.stagioni__switch { position: absolute; left: 50%; bottom: var(--sp-3); z-index: 2; display: inline-flex; padding: 0.3rem; background: rgba(24, 28, 36, 0.75); backdrop-filter: blur(8px); border-radius: 999px; transform: translateX(-50%); }
+.stagioni__switch button { padding: 0.6rem 1.3rem; font-family: var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--white); border-radius: 999px; transition: background 0.3s; }
+.stagioni__switch button[aria-checked="true"] { background: var(--orange); }
+
+/* Blocchi caratteristiche */
+.features { display: grid; gap: var(--sp-3); }
+.features__item { padding: var(--sp-4); background: var(--white); border-radius: var(--radius-m); }
+.features__item h3 { font-size: var(--fs-h3); margin-bottom: var(--sp-2); }
+.features__item p { color: var(--text-muted); }
+@media (min-width: 700px) { .features { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .features--3 { grid-template-columns: repeat(3, 1fr); } }
+
+/* Split immagine + testo */
+.split__media { overflow: hidden; border-radius: var(--radius-l); }
+.split__media img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+
+/* Classi antieffrazione */
+.rc { background: var(--ink-2); border: 1px solid var(--line-dark); }
+.rc p { color: rgba(255, 255, 255, 0.65); }
+.rc__class { font-family: var(--font-display); font-weight: 700; font-size: 4rem; line-height: 1; color: var(--orange); }
+.rc--hl { border-color: var(--orange); }
+.checklist--cols { margin-top: var(--sp-5); }
+@media (min-width: 900px) { .checklist--cols { grid-template-columns: repeat(2, 1fr); column-gap: var(--sp-5); } }
+

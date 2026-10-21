@@ -1,0 +1,14 @@
+.page-hero--comune { min-height: 72svh; }
+.page-hero--comune .eyebrow svg { margin-right: -0.2rem; }
+.page-hero--comune .eyebrow::before { display: none; }
+.comune__tip { padding: var(--sp-3); background: var(--orange-soft); border-left: 3px solid var(--orange); border-radius: var(--radius-s); }
+
+.zone__title { max-width: 20ch; }
+.zone { display: grid; gap: var(--sp-5); margin-top: var(--sp-6); }
+.zone__area { margin-bottom: var(--sp-2); padding-bottom: var(--sp-1); font-size: var(--fs-h3); border-bottom: 2px solid var(--orange); }
+.zone__group ul { display: grid; }
+.zone__group a { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--line); transition: color 0.2s, padding 0.3s var(--ease-out); }
+.zone__group a:hover { color: var(--orange); padding-left: 0.4rem; }
+.zone__group small { color: var(--text-muted); font-size: var(--fs-xs); }
+@media (min-width: 700px) { .zone { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .zone { grid-template-columns: repeat(3, 1fr); } }

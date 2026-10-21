@@ -1,0 +1,95 @@
+/* Hero a schermo pieno con video pilotato dallo scroll (home e pagine servizio) */
+.hero {
+  position: relative;
+  height: 320vh;
+  background: var(--ink);
+  color: var(--white);
+}
+.hero__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+.hero__media, .hero__scrim { position: absolute; inset: 0; }
+.hero__canvas, .hero__video { width: 100%; height: 100%; object-fit: cover; }
+.hero__canvas { display: none; }
+.hero.has-frames .hero__canvas { display: block; }
+.hero.has-frames .hero__video { display: none; }
+.hero__scrim {
+  background:
+    linear-gradient(180deg, rgba(24, 28, 36, 0.5) 0%, rgba(24, 28, 36, 0) 28%),
+    linear-gradient(0deg, rgba(24, 28, 36, 0.92) 0%, rgba(24, 28, 36, 0.25) 60%);
+}
+.hero__content { position: relative; z-index: 2; padding-top: calc(var(--header-h) + 1rem); padding-bottom: clamp(2rem, 7svh, 6rem); }
+.hero__title { font-size: min(var(--fs-display), 12svh); line-height: 0.92; margin-bottom: var(--sp-3); }
+
+/* Schermi bassi (portatili 13"): tutto il testo della hero deve stare sotto il menu */
+@media (max-height: 820px) {
+  .hero__title { font-size: min(var(--fs-display), 10.5svh); margin-bottom: var(--sp-2); }
+  .hero__lead { font-size: var(--fs-m); }
+  .hero__actions { margin-top: var(--sp-3); }
+  .hero__actions .btn--large { min-height: 50px; padding-block: 0.7rem; }
+  .hero__rating { margin-top: var(--sp-2); }
+  .hero__content .eyebrow { display: none; }
+}
+@media (max-height: 680px) {
+  .hero__title { font-size: min(var(--fs-display), 9svh); }
+  .hero__lead { display: none; }
+}
+.hero__line { display: block; }
+.hero__line--accent { color: var(--orange); }
+.hero__lead { max-width: 520px; font-size: var(--fs-l); color: rgba(255, 255, 255, 0.82); }
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-4); }
+.hero__rating { display: inline-flex; align-items: center; gap: 0.6rem; margin-top: var(--sp-3); font-size: var(--fs-s); color: rgba(255, 255, 255, 0.75); }
+.stars { display: inline-flex; gap: 2px; color: var(--orange); }
+
+.hero__outro {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--sp-2);
+  opacity: 0;
+  pointer-events: none;
+}
+.hero__outro img { width: clamp(110px, 14vw, 180px); height: auto; filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.45)); }
+.hero__outro p { font-family: var(--font-display); font-size: var(--fs-l); letter-spacing: 0.3em; text-transform: uppercase; }
+
+.hero__hint {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  z-index: 2;
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+.hero__hint span { width: 1px; height: 48px; background: linear-gradient(var(--white), transparent); animation: hint 1.8s var(--ease-out) infinite; }
+@keyframes hint { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+@media (min-width: 900px) { .hero__hint { display: flex; } }
+@media (max-width: 640px) { .hero { height: 240vh; } .hero__actions .btn { width: 100%; } }
+
+/* Variante per le pagine servizio: titolo più contenuto */
+.hero--servizio { height: 260vh; }
+.hero__title--servizio { max-width: 16ch; font-size: min(var(--fs-h1), 11svh); }
+.hero--servizio .breadcrumb { color: rgba(255, 255, 255, 0.85); }
+@media (max-width: 640px) { .hero--servizio { height: 200vh; } }
+
+/* Video con il prodotto al centro: lo spostiamo a destra per lasciare spazio al titolo */
+.hero--servizio .hero__scrim {
+  background:
+    linear-gradient(90deg, rgba(24, 28, 36, 0.88) 0%, rgba(24, 28, 36, 0.55) 38%, rgba(24, 28, 36, 0) 65%),
+    linear-gradient(0deg, rgba(24, 28, 36, 0.7) 0%, rgba(24, 28, 36, 0) 45%);
+}
+@media (min-width: 900px) {
+  .hero--shift .hero__video { transform: translateX(22%) scale(0.92); }
+}
