@@ -127,6 +127,12 @@
 /* Home: più scroll per il video e per l'ingresso lento del logo */
 .hero--home { height: 520vh; }
 @media (max-width: 640px) { .hero--home { height: 440vh; } }
+/* Su telefono la home mostra la camminata reale dall'ingresso del Castello allo showroom
+   (fotogrammi home-mobile); il primo fotogramma fa da poster, al posto di quello del video desktop */
+@media (max-width: 950px), (max-aspect-ratio: 1/1) {
+  .hero--home .hero__media { background: var(--ink) url("/dsgallo-anteprima/assets/frames/home-mobile/001.webp") center / cover no-repeat; }
+  .hero--home .hero__video { visibility: hidden; }
+}
 
 /* Variante per le pagine servizio: titolo più contenuto */
 .hero--servizio { height: 260vh; }
@@ -141,5 +147,134 @@
     linear-gradient(0deg, rgba(24, 28, 36, 0.7) 0%, rgba(24, 28, 36, 0) 45%);
 }
 @media (min-width: 900px) {
-  .hero--shift .hero__video { transform: translateX(22%) scale(0.92); }
+  /* all'inizio il prodotto sta a destra del titolo; quando il testo esce torna al centro (--center 0 -> 1, hero-finestra.js) */
+  .hero--shift .hero__video { transform: translateX(calc(22% * (1 - var(--center, 0)))) scale(calc(0.92 + 0.08 * var(--center, 0))); }
 }
+
+/* Indicazione di scorrimento (modulo swipe-hint.js), unica per telefono e desktop, su tutte le pagine.
+   Capsula bassa e orizzontale nel margine in fondo allo schermo (icona + scritta), bianca su fondo scuro sfocato:
+   si legge su fondi chiari e scuri. Se sotto c'è del testo diventa un cerchietto con le sole frecce (.is-mini).
+   Telefono e Mac: frecce in su. Windows/altri: mouse con rotellina. */
+.hero__hint { display: none !important; } /* vecchio "Scorri" in basso a destra, sostituito */
+
+.swipe-hint {
+  position: fixed;
+  left: 50%;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 38px;
+  padding: 0 1rem 0 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(24, 28, 36, 0.62);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  color: var(--white);
+  font: inherit;
+  cursor: pointer;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 10px);
+  transition: opacity 0.35s ease, transform 0.35s ease, padding 0.2s ease;
+}
+.swipe-hint.is-on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.swipe-hint__label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
+
+/* sopra del testo: solo il cerchietto con l'icona */
+.swipe-hint.is-mini { width: 38px; padding: 0; justify-content: center; gap: 0; }
+.swipe-hint.is-mini .swipe-hint__label { display: none; }
+
+/* frecce in su (telefono e Mac) */
+.swipe-hint__touch { display: flex; flex-direction: column; align-items: center; padding-top: 3px; }
+.swipe-hint__touch svg {
+  width: 16px;
+  height: 9px;
+  margin-top: -2px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.3;
+  animation: swipe-up 1.4s ease-in-out infinite;
+}
+.swipe-hint__touch svg:nth-child(1) { animation-delay: 0.2s; }
+.swipe-hint__touch svg:nth-child(2) { animation-delay: 0s; }
+@keyframes swipe-up {
+  0%, 100% { opacity: 0.3; transform: translateY(2px); }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
+
+/* mouse con la rotellina (Windows e altri desktop) */
+.swipe-hint__mouse { display: none; position: relative; width: 15px; height: 23px; border: 2px solid currentColor; border-radius: 8px; flex: none; }
+.swipe-hint__wheel { position: absolute; left: 50%; top: 4px; width: 3px; height: 6px; margin-left: -1.5px; border-radius: 2px; background: var(--orange); animation: swipe-wheel 1.6s ease-in-out infinite; }
+@keyframes swipe-wheel {
+  0% { opacity: 0; transform: translateY(-2px); }
+  25% { opacity: 1; }
+  70% { opacity: 1; transform: translateY(6px); }
+  100% { opacity: 0; transform: translateY(8px); }
+}
+@media (min-width: 951px) and (min-aspect-ratio: 1001/1000) {
+  .swipe-hint { bottom: 16px; height: 42px; padding: 0 1.15rem 0 0.95rem; gap: 0.6rem; }
+  .swipe-hint.is-mini { width: 42px; padding: 0; }
+  .swipe-hint__label { font-size: 0.75rem; }
+  .swipe-hint__touch { display: none; }
+  .swipe-hint__mouse { display: block; }
+  .swipe-hint--up .swipe-hint__touch { display: flex; }
+  .swipe-hint--up .swipe-hint__mouse { display: none; }
+}
+@media (hover: hover) {
+  .swipe-hint.is-on:hover { background: rgba(24, 28, 36, 0.85); }
+}
+
+/* gesto sbagliato (laterale): l'indicazione salta per richiamare quello giusto */
+.swipe-hint.is-nudge { animation: swipe-nudge 0.9s ease; }
+.swipe-hint.is-nudge .swipe-hint__touch svg { animation-duration: 0.6s; }
+@keyframes swipe-nudge {
+  0%, 100% { transform: translate(-50%, 0) scale(1); }
+  15% { transform: translate(-50%, -8px) scale(1.12); }
+  30% { transform: translate(-50%, 0) scale(1); }
+  45% { transform: translate(-50%, -5px) scale(1.06); }
+  60% { transform: translate(-50%, 0) scale(1); }
+}
+
+/* barra di avanzamento della scena sul bordo destro */
+.scroll-meter {
+  position: fixed;
+  right: 5px;
+  top: 28svh;
+  z-index: 80;
+  width: 3px;
+  height: 26svh;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.scroll-meter.is-on { opacity: 1; }
+.scroll-meter__fill { position: absolute; inset: 0; background: var(--orange); transform: scaleY(0); transform-origin: top; }
+@media (min-width: 951px) and (min-aspect-ratio: 1001/1000) {
+  .scroll-meter { right: 12px; top: 37vh; height: 26vh; width: 4px; }
+}
+
+/* hero: striscia libera in fondo per la capsula, sotto i pulsanti e le stelle (mai sopra le scritte) */
+.hero .hero__content { padding-bottom: max(clamp(2rem, 7svh, 6rem), 4.5rem); }
+@media (max-width: 950px), (max-aspect-ratio: 1/1) {
+  .hero .hero__content { padding-bottom: calc(3.6rem + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .swipe-hint__touch svg, .swipe-hint__wheel, .swipe-hint.is-nudge { animation: none; opacity: 1; }
+}
+
+/* Esploso del serramento (Serramenti): il fondo del video è già il colore del sito; "lighten" assorbe le piccole
+   differenze di colore dovute alla compressione, così il prodotto galleggia sulla hero senza riquadro */
+.hero[data-frames*="serramento-esploso"] .hero__video,
+.hero[data-frames*="serramento-esploso"] .hero__canvas { mix-blend-mode: lighten; }
+/* il fondo deve stare nello stesso gruppo del video (il contenitore sticky isola la fusione) */
+.hero[data-frames*="serramento-esploso"] .hero__media { background: var(--ink); }
