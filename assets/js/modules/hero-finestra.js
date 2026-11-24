@@ -30,6 +30,11 @@ export default function heroFinestra(section, { gsap, ScrollTrigger, reduce }) {
     .to(copy, { opacity: 0, y: -60, duration: 0.22 }, 0.06)
     .to(scrim, { opacity: 0, duration: 0.25 }, 0.06);
 
+  // prodotto spostato a destra per lasciare spazio al titolo: quando il testo esce si porta al centro
+  if (section.classList.contains("hero--shift")) {
+    tl.fromTo(section, { "--center": 0 }, { "--center": 1, duration: 0.24, ease: "power1.inOut" }, 0.08);
+  }
+
   // finale della home: lo sfondo chiaro copre il video, poi il logo 3D entra girando
   // lentamente e si ferma di fronte, infine compare la scritta; un tratto di scroll fermo prima di uscire
   if (outro) {

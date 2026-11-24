@@ -4,9 +4,36 @@
 export const MOBILE = "(max-width: 950px), (max-aspect-ratio: 1/1)";
 
 // sceglie il motore giusto per la sezione (data-frames + data-frame-count per il mobile)
+// e lo cambia al volo se lo schermo passa da desktop a telefono (rotazione tablet,
+// vista "dispositivo" degli strumenti per sviluppatori) senza dover ricaricare la pagina
 export function scrubber(section, canvas, video) {
-  const useFrames = section.dataset.frames && canvas && window.matchMedia(MOBILE).matches;
-  return useFrames ? frameSequence(section, canvas) : videoScrub(video);
+  const mq = window.matchMedia(MOBILE);
+  const canFrames = Boolean(section.dataset.frames && canvas);
+  let frames = null;
+  let vid = null;
+  let engine = null;
+  let lastP = 0;
+
+  function pick() {
+    if (canFrames && mq.matches) {
+      frames ??= frameSequence(section, canvas);
+      if (frames.ready()) section.classList.add("has-frames");
+      engine = frames;
+    } else {
+      section.classList.remove("has-frames");
+      vid ??= video ? videoScrub(video) : null;
+      engine = vid;
+    }
+    engine?.(lastP, true);
+  }
+
+  pick();
+  mq.addEventListener("change", pick);
+
+  return (p) => {
+    lastP = p;
+    engine?.(p);
+  };
 }
 
 export function videoScrub(video) {
@@ -56,6 +83,7 @@ export function frameSequence(section, canvas) {
   const pattern = section.dataset.frames;
   const frames = [];
   let current = 0;
+  let firstReady = false;
 
   const src = (i) => pattern.replace("###", String(i + 1).padStart(3, "0"));
 
@@ -66,7 +94,8 @@ export function frameSequence(section, canvas) {
     // il poster resta visibile finché non arriva il primo fotogramma
     if (i === 0) {
       img.onload = () => {
-        section.classList.add("has-frames");
+        firstReady = true;
+        if (window.matchMedia(MOBILE).matches) section.classList.add("has-frames");
         resize();
       };
     }
@@ -87,7 +116,7 @@ export function frameSequence(section, canvas) {
     let k = i;
     while (k > 0 && !loaded(frames[k])) k--;
     const img = frames[k];
-    if (!loaded(img)) return;
+    if (!loaded(img) || !canvas.width) return;
     const cw = canvas.width;
     const ch = canvas.height;
     const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
@@ -98,11 +127,16 @@ export function frameSequence(section, canvas) {
 
   window.addEventListener("resize", resize);
 
-  return (p) => {
+  const draw = (p, force) => {
     const i = Math.min(count - 1, Math.round(p * (count - 1)));
-    if (i !== current) {
+    if (force) {
+      current = i;
+      resize();
+    } else if (i !== current) {
       current = i;
       render(i);
     }
   };
+  draw.ready = () => firstReady;
+  return draw;
 }
