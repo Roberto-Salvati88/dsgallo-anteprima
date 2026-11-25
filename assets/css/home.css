@@ -102,6 +102,7 @@
 .lavori__card { flex: 0 0 min(80vw, 420px); margin: 0; scroll-snap-align: start; }
 .lavori__card img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius-l); }
 .lavori__card figcaption { display: grid; margin-top: var(--sp-2); font-size: var(--fs-s); color: var(--text-muted); }
+.lavori__nota { margin-top: 0.15rem; font-size: 0.75rem; letter-spacing: 0.02em; opacity: 0.75; }
 .lavori__card strong { font-family: var(--font-display); font-size: 1.25rem; text-transform: uppercase; color: var(--ink); }
 
 /* cYs */

@@ -2,6 +2,7 @@
 .gallery { display: grid; gap: var(--sp-2); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 .gallery__item { margin: 0; overflow: hidden; border-radius: var(--radius-m); background: var(--white); }
 .gallery__item img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; transition: transform 1s var(--ease-out); }
+.gallery__nota { display: block; margin-top: 0.15rem; font-size: 0.75rem; opacity: 0.75; }
 .gallery__item:hover img { transform: scale(1.04); }
 .gallery__item figcaption { padding: 0.8rem 1rem; font-size: var(--fs-xs); color: var(--text-muted); }
 
