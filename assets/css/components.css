@@ -237,16 +237,73 @@
   left: 50%;
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
+  font-size: 1.35rem;
   font-weight: 700;
+  letter-spacing: 0.05em;
   color: var(--ink);
   background: var(--white);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   box-shadow: var(--shadow-m);
+  transition: transform 0.25s var(--ease-out);
 }
-.compare__range { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: ew-resize; }
+/* Anello che pulsa finché lo slider non viene usato */
+.compare__handle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  transform: translate(-50%, -50%);
+  animation: compare-pulse 1.8s var(--ease-out) infinite;
+  pointer-events: none;
+}
+.compare.is-used .compare__handle::before { animation: none; opacity: 0; }
+.compare:hover .compare__handle::after,
+.compare.is-focus .compare__handle::after { transform: translate(-50%, -50%) scale(1.08); }
+.compare.is-focus .compare__handle::after { outline: 3px solid var(--orange); outline-offset: 3px; }
+@keyframes compare-pulse {
+  0% { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.9); }
+}
+/* Etichetta d'azione sotto la maniglia: la segue e sparisce al primo utilizzo */
+.compare__hint {
+  position: absolute;
+  top: calc(50% + 38px);
+  left: var(--pos);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--white);
+  background: rgba(24, 28, 36, 0.82);
+  border-radius: 999px;
+  box-shadow: var(--shadow-m);
+  transform: translateX(-50%);
+  pointer-events: none;
+  transition: opacity 0.35s, transform 0.35s;
+}
+.compare__hint svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.compare__hint svg:first-child { animation: compare-nudge-l 1.4s ease-in-out infinite; }
+.compare__hint svg:last-child { animation: compare-nudge-r 1.4s ease-in-out infinite; }
+@keyframes compare-nudge-l { 50% { transform: translateX(-3px); } }
+@keyframes compare-nudge-r { 50% { transform: translateX(3px); } }
+.compare.is-used .compare__hint { opacity: 0; transform: translateX(-50%) translateY(6px); }
+@media (prefers-reduced-motion: reduce) {
+  .compare__handle::before, .compare__hint svg { animation: none; }
+}
+.compare__range { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: grab; touch-action: pan-y; }
+.compare__range:active { cursor: grabbing; }
 .compare__label {
   position: absolute;
   top: var(--sp-2);
